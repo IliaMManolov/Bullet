@@ -19,6 +19,8 @@ int main()
     float Mx = 0;
     float My = 0;
 
+    int test = 0;
+
     float distance = 0;
 
     sf::Vector2f delta(Mx - Bx, My - By);
