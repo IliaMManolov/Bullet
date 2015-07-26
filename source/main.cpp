@@ -2,18 +2,117 @@
 
 #include <cmath>
 #include <iostream>
+#include <list>
 
 using namespace std;
+
+class Bullet : public sf::Drawable, public sf::Transformable
+{
+    public:
+        Bullet(sf::Vector2f st, sf::Vector2f d, float s);
+
+        void update();
+
+
+
+    private:
+        virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+
+        sf::Vector2f direction;
+        float speed;
+
+        sf::RectangleShape gBullet;
+
+};
+
+Bullet::Bullet(sf::Vector2f st = sf::Vector2f(0, 0), sf::Vector2f d = sf::Vector2f(0, 0), float s = 0.f)
+: speed(s)
+, gBullet(sf::Vector2f(16, 16))
+{
+    this->move(st);
+
+    gBullet.setFillColor(sf::Color::Red);
+
+    sf::Vector2f delta = d-st;
+
+    float dLen = sqrt(delta.x*delta.x+delta.y*delta.y);
+
+    direction = delta/dLen;
+}
+
+
+void Bullet::update()
+{
+    this->move(direction*speed);
+}
+
+void Bullet::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    states.transform *= this->getTransform();
+    target.draw(gBullet, states);
+}
+
+
+
+vector<Bullet> vBullet;
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 600), "mouse shooting");
     window.setFramerateLimit(60);
+    //window.setVerticalSyncEnabled(true);
 
-    sf::RectangleShape player(sf::Vector2f(32, 32));
-    sf::RectangleShape bullet(sf::Vector2f(16, 16));
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            switch(event.type)
+            {
+                case sf::Event::Closed:
+                    window.close();
+                    break;
+                case sf::Event::MouseButtonReleased:
+                    if (event.mouseButton.button == sf::Mouse::Left)
+                    {
+                        sf::Vector2f hue(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+                        vBullet.push_back(Bullet(sf::Vector2f(400, 300),  hue, 5.f));
+                    }
+                    break;
+            }
+        }
 
-    float Bx = 0;
+        for (int i=0;i<vBullet.size();i++)
+        {
+            vBullet[i].update();
+
+            sf::Vector2f tmp = vBullet[i].getPosition();
+
+            if (tmp.x<-800||tmp.x>1600||tmp.y<-600||tmp.y>1200)
+            {
+                vBullet.erase(vBullet.begin()+i); i--;
+            }
+        }
+
+        window.clear();
+
+        for (int i=0;i<vBullet.size();i++)
+        {
+            window.draw(vBullet[i]);
+        }
+
+        window.display();
+
+    }
+
+
+
+
+
+
+
+    /*float Bx = 0;
     float By = 0;
 
     float Mx = 0;
@@ -79,7 +178,7 @@ int main()
         window.draw(player);
         window.draw(bullet);
         window.display();
-    }
+    }*/
 
     return 0;
 }
