@@ -1,65 +1,29 @@
-#include <SFML/Graphics.hpp>
+#include "Game.hpp"
+
+
+
+int main()
+{
+    Game game;
+    game.run();
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+/*#include <SFML/Graphics.hpp>
 
 #include <cmath>
 #include <iostream>
 #include <list>
 
 using namespace std;
-
-class Bullet : public sf::Drawable, public sf::Transformable
-{
-    public:
-        Bullet(sf::Vector2f st, sf::Vector2f d, float s);
-
-        void update();
-
-    private:
-        virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-
-        sf::Vector2f direction;
-
-        float speed;
-
-        sf::RectangleShape gBullet;
-
-
-        float rotation;
-
-        sf::RectangleShape gBullet;
-};
-
-Bullet::Bullet(sf::Vector2f st = sf::Vector2f(0, 0), sf::Vector2f d = sf::Vector2f(0, 0), float s = 0.f)
-: speed(s)
-, gBullet(sf::Vector2f(16, 16))
-{
-    const float PI = 3.14159265;
-
-    this->move(st);
-
-    gBullet.setFillColor(sf::Color::Red);
-
-    sf::Vector2f delta = d-st;
-
-    float dLen = sqrt(delta.x*delta.x+delta.y*delta.y);
-
-    direction = delta/dLen;
-
-    rotation = (atan2(st.x - d.x, st.y - d.y)) * 180 / PI;
-
-    gBullet.setRotation(rotation + 180);
-}
-
-
-void Bullet::update()
-{
-    this->move(direction*speed);
-}
-
-void Bullet::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-    states.transform *= this->getTransform();
-    target.draw(gBullet, states);
-}
 
 
 
@@ -120,7 +84,7 @@ int main()
 
 
 
-    /*float Bx = 0;
+    float Bx = 0;
     float By = 0;
 
     float Mx = 0;
@@ -186,7 +150,7 @@ int main()
         window.draw(player);
         window.draw(bullet);
         window.display();
-    }*/
+    }
 
     return 0;
-}
+}*/
